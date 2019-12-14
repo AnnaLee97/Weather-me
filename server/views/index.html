@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<head>
+
+<script language="javascript">
+
+    //var obj={};
+
+    function handle(){
+        _getWeather();
+        _readClass();
+    }
+
+    function _getWeather(){
+        var xmlhttp;  
+        if (window.XMLHttpRequest) {  
+            xmlhttp = new XMLHttpRequest();
+        } 
+        else {  
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        //Ajax구현부분
+        xmlhttp.onreadystatechange = function(obj) {  
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                //var msg = JSON.parse(xmlhttp.responseText);
+                //obj.weather = msg.weather;
+                //obj.temperature = msg.temperature;
+                document.getElementById("_show").innerText = xmlhttp.responseText;
+            }
+        };
+        var url = "http://localhost:8080/getWeather?city=";
+        url+=document.getElementById("_city").value;
+        xmlhttp.open("GET", url, true);  
+        xmlhttp.send();
+    }
+
+    function _readClass(){
+        var xmlhttp2;  
+        xmlhttp2 = new XMLHttpRequest();
+
+        //Ajax구현부분
+        xmlhttp2.onreadystatechange = function() {  
+            if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+                //obj.class = xmlhttp2.responseText;
+                //document.getElementById("_show").innerHTML = obj.class;
+            }
+        };
+        var url = "http://localhost:8080/readClass";
+        xmlhttp2.open("GET", url, true);  
+        xmlhttp2.send();
+
+        //xmlhttp2.onload = function(){
+            //alert(JSON.stringify(obj));
+            //sendData(obj);
+            //document.getElementById("_show").innerText = JSON.stringify(obj);
+        //};
+    
+    }
+
+    function sendData(){
+        //alert(obj);
+        var xmlhttp3;
+        xmlhttp3 = new XMLHttpRequest();
+        //alert(JSON.stringify(obj));
+        //Ajax구현부분
+        xmlhttp3.onreadystatechange = function() {  
+            if (xmlhttp3.readyState == 4 && xmlhttp3.status == 200) {
+                document.getElementById("_show").innerText = "data inserted!";
+            }
+        };
+        var url = "http://localhost:8080/push";
+        //url+="weather="+obj.weather;
+        //url+="&class="+obj.class;
+        //url+="&temperature="+obj.temperature;
+
+        xmlhttp3.open("GET", url, true);
+        //xmlhttp3.setRequestHeader('Content-Type', 'application/json');
+        xmlhttp3.send();
+    }
+
+</script>
+</head>
+<body>
+    <br><br><br><br><br><br><br><br><br><br><br>
+    <div style="text-align:center">
+        <form name="insertCity">
+            Enter the city name:
+            <input type="text" id = "_city">
+            <button id="submit" onclick = handle()>find</button>
+            
+        </form>
+        <h5>The first letter must be <b>CAPITAL</b></h5>
+        
+        
+        <button onclick=sendData()>submit</button>
+        <div id="_show"></div>
+    
+    </div> 
+
+    <!--
+        <form name="insertCity" action="http://localhost:8080/getWeather">
+            Enter the city name:
+            <input type="text" name = "city" id = "_city">
+            <input type="submit" value="Submit"></input>
+        </form>
+        <h5>The first letter must be <b>CAPITAL</b></h5>
+
+        <button id="_class" onClick = _readClass()>class</button>
+            <button id="_insert" onclick = sendData()>send</button>
+    -->
+    
+</body>
+</html>
