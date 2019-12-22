@@ -15,7 +15,7 @@ mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '00000000',
+    password: 'sjh01210309',
     database: 'weather'
 })
 connection.connect();
@@ -25,7 +25,7 @@ function insert_db(obj) {
       //console.log(obj);
     if (err) throw err;
     console.log("database insertion ok= %j", obj);
-    eraseLog();
+    //eraseLog();
   });
 }
 
@@ -46,15 +46,19 @@ router.get('/', function(req, res){
   */
   var obj={};
   var temp = fs.readFileSync(filename,'utf8');
-    var arr = temp.toString().split('\n');
-    for(var i=0; i<arr.length ;i++){
-        if(arr[i].charAt(0)=='w')
-            obj.weather = arr[i].slice(1);
-        else if(arr[i].charAt(0)=='t')
-            obj.temperature = arr[i].slice(1);
-        else if(arr[i].charAt(0)=='c') obj.class = arr[i].slice(1);
-        else if(arr[i].charAt(0)=='y') obj.city = arr[i].slice(1);
-    }
+  var arr = temp.toString().split('\n');
+  for(var i=0; i<arr.length ;i++){
+      if(arr[i].charAt(0)=='w')
+          obj.weather = arr[i].slice(1);
+      else if(arr[i].charAt(0)=='t')
+          obj.temperature = arr[i].slice(1);
+      else if(arr[i].charAt(0)=='c') obj.class = arr[i].slice(1);
+      else if(arr[i].charAt(0)=='y') obj.city = arr[i].slice(1);
+  }
+  var date = new Date();
+  obj.year = date.getFullYear();
+  obj.month = date.getMonth()+1;
+  obj.date = date.getDate();
   
   console.log("GET %j", obj);
   insert_db(obj);
