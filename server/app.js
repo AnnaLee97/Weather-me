@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({extended : true}));
 
 var insertRouter = require('./routes/insert');
 var readClassRouter = require('./routes/readClass');
+var showResultRouter = require('./routes/showResult');
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -27,6 +28,9 @@ var server = app.listen(8080, function (req, res) {
 app.get('/', function(req, res){
   res.render('index.html');
 })
+app.get('/check',function(req,res){
+  res.render('check.html');
+});
 
 
 var url = "http://api.openweathermap.org/data/2.5/weather?q="
@@ -39,7 +43,9 @@ app.get('/getWeather', function(req, res){
 
     var api = url + city +key;
     request(api, function(error, response, body){
+      console.log(body);
         var temp = JSON.parse(body);
+        
         obj.weather = temp.weather[0].main;
         obj.temperature = parseFloat(temp.main.feels_like)-273.15; //change K to C
 
@@ -57,6 +63,7 @@ app.get('/getWeather', function(req, res){
 app.use(express.json());
 app.use('/push', insertRouter);
 app.use('/readClass', readClassRouter);
+app.use('/showResult', showResultRouter);
 
 
 module.exports = app;
