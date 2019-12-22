@@ -25,7 +25,7 @@
                 //var msg = JSON.parse(xmlhttp.responseText);
                 //obj.weather = msg.weather;
                 //obj.temperature = msg.temperature;
-                document.getElementById("_show").innerText = xmlhttp.responseText;
+                //document.getElementById("_show").innerText = xmlhttp.responseText;
             }
         };
         var url = "http://localhost:8080/getWeather?city=";
@@ -65,7 +65,8 @@
         //Ajax구현부분
         xmlhttp3.onreadystatechange = function() {  
             if (xmlhttp3.readyState == 4 && xmlhttp3.status == 200) {
-                document.getElementById("_show").innerText = "data inserted!";
+                document.getElementById("send").innerText = "data inserted!";
+                //alert("data inserted!");
             }
         };
         var url = "http://localhost:8080/push";
@@ -78,10 +79,41 @@
         xmlhttp3.send();
     }
 
+    function showResult(){
+        var xmlhttp4;
+        xmlhttp4 = new XMLHttpRequest();
+        //alert(JSON.stringify(obj));
+        //Ajax구현부분
+        xmlhttp4.onreadystatechange = function() {  
+            if (xmlhttp4.readyState == 4 && xmlhttp4.status == 200) {
+               //alert(xmlhttp4.responseText);
+               var msg = xmlhttp4.responseText;
+               document.getElementById("_text").innerText = msg;
+
+               setTimeout(function(){
+                    if(msg.charAt(1)=='C'){
+                    window.open('http://mss.kr/1173366','winter', 'top=100px, left=100px, height=800px, width=800px');
+                }
+                else if(msg.charAt(1)=='H'){
+                    window.open('http://mss.kr/1040865','winter', 'top=100px, left=100px, height=800px, width=800px');
+                }
+               }, 2000);
+
+            }
+        };
+        var url = "http://localhost:8080/showResult";
+
+        xmlhttp4.open("GET", url, true);
+        xmlhttp4.send();
+    }
+
 </script>
 </head>
 <body>
-    <br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br>
+    <div style="text-align:center; font-size: 72px; font-weight: bolder">Weather-me</div>
+    <br><br>
+    
     <div style="text-align:center">
         <form name="insertCity">
             Enter the city name:
@@ -92,9 +124,12 @@
         <h5>The first letter must be <b>CAPITAL</b></h5>
         
         
-        <button onclick=sendData()>submit</button>
+        <button id="send" onclick=sendData()>submit</button>
         <div id="_show"></div>
-    
+        <br>
+        <button id = "result" onclick = showResult()>Check!</button>
+        <br>
+        <div id="_text"></div>
     </div> 
 
     <!--
